@@ -4,10 +4,9 @@ Remontowy Manager Budżetu to prosta, ale potężna aplikacja internetowa stworz
 
 Aplikacja jest wdrożona na GitHub Pages i wykorzystuje Firebase jako backend, co zapewnia synchronizację danych między wieloma użytkownikami i urządzeniami.
 
-Live Demo: Link do Twojej aplikacji na r3volte.github.io (Wstaw tutaj swój link)
 
 ✨ Kluczowe Funkcjonalności
-Analityczny Panel Główny: Interaktywny dashboard z kluczowymi wskaźnikami (budżet, wydatki, pozostała kwota) oraz wizualizacjami danych (wykres kołowy i słupkowy).
+  Analityczny Panel Główny: Interaktywny dashboard z kluczowymi wskaźnikami (budżet, wydatki, pozostała kwota) oraz wizualizacjami danych (wykres kołowy i słupkowy).
 
 Synchronizacja w Czasie Rzeczywistym: Dzięki integracji z Firebase Firestore, wszystkie dane są natychmiast synchronizowane między wszystkimi użytkownikami.
 
