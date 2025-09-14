@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manager Wydatków Mieszkaniowych</title>
+    <title>Manager Wydatków Remontowych</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,9 +21,23 @@
         .dark table thead { background-color: #334155; }
         .dark tbody tr { border-color: #334155; }
         .dark tbody tr:hover { background-color: #283447; }
-        .dark .status-badge { filter: brightness(0.8); }
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .status-select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            line-height: 1.25rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            text-align: center;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -31,7 +45,7 @@
     <div class="container mx-auto p-4 md:p-8 max-w-7xl">
         <header class="mb-6 flex justify-between items-center">
              <div>
-                <h1 class="text-4xl font-bold text-slate-900">Centrum Dowodzenia Mieszkaniem P&K</h1>
+                <h1 class="text-4xl font-bold text-slate-900">Centrum Dowodzenia Remontem</h1>
                 <p class="text-slate-500 mt-2">Pełna analiza i zarządzanie budżetem w jednym miejscu.</p>
             </div>
             <div class="flex items-center">
@@ -65,17 +79,18 @@
                 <div id="loader-expenses" class="loader"></div>
                 <section class="card bg-white p-6 rounded-xl shadow-md border mb-8">
                     <h2 id="form-title" class="text-xl font-bold text-slate-900 mb-4">Dodaj nowy wpis</h2>
-                    <form id="expense-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <form id="expense-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <input type="hidden" id="expense-id">
                         <div><label for="name" class="block text-sm font-medium mb-1">Nazwa / Opis</label><input type="text" id="name" class="w-full px-3 py-2 border rounded-md" required></div>
                         <div><label for="category" class="block text-sm font-medium mb-1">Kategoria</label><select id="category" class="w-full px-3 py-2 border rounded-md" required><option>Meble</option><option>AGD/RTV</option><option>Materiały budowlane</option><option>Oświetlenie</option><option>Dekoracje i tekstylia</option><option>Narzędzia i akcesoria</option><option>Usługi</option><option>Kuchnia - wyposażenie</option><option>Łazienka - wyposażenie</option><option>Inne</option></select></div>
                         <div><label for="room" class="block text-sm font-medium mb-1">Pomieszczenie</label><input type="text" id="room" class="w-full px-3 py-2 border rounded-md"></div>
                         <div><label for="budget" class="block text-sm font-medium mb-1">Budżet (Plan)</label><input type="number" id="budget" step="0.01" class="w-full px-3 py-2 border rounded-md"></div>
-                        <div><label for="cost" class="block text-sm font-medium mb-1">Koszt Rzeczywisty</label><input type="number" id="cost" step="0.01" class="w-full px-3 py-2 border rounded-md"></div>
+                        <div><label for="itemCost" class="block text-sm font-medium mb-1">Koszt produktu</label><input type="number" id="itemCost" step="0.01" class="w-full px-3 py-2 border rounded-md"></div>
+                        <div><label for="transportCost" class="block text-sm font-medium mb-1">Koszt transportu</label><input type="number" id="transportCost" step="0.01" class="w-full px-3 py-2 border rounded-md"></div>
                         <div><label for="status" class="block text-sm font-medium mb-1">Status</label><select id="status" class="w-full px-3 py-2 border rounded-md" required><option>Na liście życzeń</option><option>Do kupienia</option><option>Zamówione</option><option>Dostarczone / Zakończone</option></select></div>
-                        <div class="md:col-span-1"><label for="productLink" class="block text-sm font-medium mb-1">Link do produktu</label><input type="url" id="productLink" class="w-full px-3 py-2 border rounded-md"></div>
-                        <div class="md:col-span-2"><label for="imageUrl" class="block text-sm font-medium mb-1">URL zdjęcia / paragonu</label><input type="url" id="imageUrl" class="w-full px-3 py-2 border rounded-md"></div>
-                        <div class="md:col-span-2 lg:col-span-3 flex justify-end items-center gap-4"><button type="button" id="cancel-edit-btn" class="hidden px-6 py-2 text-sm font-semibold bg-slate-200 rounded-md">Anuluj</button><button type="submit" id="submit-btn" class="px-6 py-2 font-semibold text-white bg-blue-600 rounded-md">Dodaj wpis</button></div>
+                        <div class="lg:col-span-1"><label for="productLink" class="block text-sm font-medium mb-1">Link do produktu</label><input type="url" id="productLink" class="w-full px-3 py-2 border rounded-md"></div>
+                        <div class="lg:col-span-2"><label for="imageUrl" class="block text-sm font-medium mb-1">URL zdjęcia / paragonu</label><input type="url" id="imageUrl" class="w-full px-3 py-2 border rounded-md"></div>
+                        <div class="md:col-span-2 lg:col-span-4 flex justify-end items-center gap-4"><button type="button" id="cancel-edit-btn" class="hidden px-6 py-2 text-sm font-semibold bg-slate-200 rounded-md">Anuluj</button><button type="submit" id="submit-btn" class="px-6 py-2 font-semibold text-white bg-blue-600 rounded-md">Dodaj wpis</button></div>
                     </form>
                 </section>
                 <section class="mb-6 flex flex-wrap gap-4 items-center justify-between">
@@ -87,14 +102,20 @@
                     <button id="export-csv-btn" class="px-4 py-2 font-semibold text-white bg-green-600 rounded-md">Eksportuj do CSV</button>
                 </section>
                 <section class="card bg-white rounded-xl shadow-md border overflow-hidden">
-                    <div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="bg-slate-100 dark:bg-slate-700 text-xs uppercase"><tr><th class="px-6 py-3">Zdjęcie</th><th class="px-6 py-3">Nazwa</th><th class="px-6 py-3">Status</th><th class="px-6 py-3">Kategoria</th><th class="px-6 py-3">Pomieszczenie</th><th class="px-6 py-3 text-right">Budżet</th><th class="px-6 py-3 text-right">Koszt</th><th class="px-6 py-3 text-right">Różnica</th><th class="px-6 py-3 text-center">Akcje</th></tr></thead><tbody id="expense-list" class="divide-y dark:divide-slate-700"></tbody></table></div>
+                    <div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="bg-slate-100 dark:bg-slate-700 text-xs uppercase"><tr><th class="px-6 py-3">Zdjęcie</th><th class="px-6 py-3">Nazwa</th><th class="px-6 py-3">Status</th><th class="px-6 py-3">Kategoria</th><th class="px-6 py-3">Pomieszczenie</th><th class="px-6 py-3 text-right">Budżet</th><th class="px-6 py-3 text-right">Koszt całkowity</th><th class="px-6 py-3 text-right">Różnica</th><th class="px-6 py-3 text-center">Akcje</th></tr></thead><tbody id="expense-list" class="divide-y dark:divide-slate-700"></tbody></table></div>
                 </section>
             </div>
             <div id="page-wishlist" class="page">
                 <div id="loader-wishlist" class="loader"></div>
                 <section class="card bg-white rounded-xl shadow-md border overflow-hidden">
-                    <div class="p-6"><h2 class="text-xl font-bold text-slate-900">Wasze plany i pomysły</h2></div>
-                    <div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="bg-slate-100 dark:bg-slate-700 text-xs uppercase"><tr><th class="px-6 py-3">Zdjęcie</th><th class="px-6 py-3">Nazwa</th><th class="px-6 py-3">Kategoria</th><th class="px-6 py-3">Pomieszczenie</th><th class="px-6 py-3 text-right">Szacowany budżet</th><th class="px-6 py-3 text-center">Akcje</th></tr></thead><tbody id="wishlist-list" class="divide-y dark:divide-slate-700"></tbody></table></div>
+                    <div class="p-6 flex justify-between items-center">
+                        <h2 class="text-xl font-bold text-slate-900">Wasze plany i pomysły</h2>
+                        <div class="text-right">
+                            <h3 class="text-sm font-semibold uppercase text-slate-500">Szacowana suma</h3>
+                            <p id="wishlist-total" class="text-2xl font-bold text-blue-600 mt-1">0,00 zł</p>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="bg-slate-100 dark:bg-slate-700 text-xs uppercase"><tr><th class="px-6 py-3">Zdjęcie</th><th class="px-6 py-3">Nazwa</th><th class="px-6 py-3">Status</th><th class="px-6 py-3">Kategoria</th><th class="px-6 py-3">Pomieszczenie</th><th class="px-6 py-3 text-right">Szacowany budżet</th><th class="px-6 py-3 text-center">Akcje</th></tr></thead><tbody id="wishlist-list" class="divide-y dark:divide-slate-700"></tbody></table></div>
                 </section>
             </div>
         </main>
@@ -107,11 +128,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-check-compat.js"></script>
 
     <script>
-        // BARDZO WAŻNE: Wklej tutaj swoje prawdziwe klucze z panelu Firebase!
-        // Inaczej aplikacja nie połączy się z bazą danych.
-
-        // KROK 1: TWOJA KONFIGURACJA FIREBASE ZOSTAŁA WSTAWIONA PONIŻEJ
-        // Wszystko jest już gotowe.
         const firebaseConfig = {
             apiKey: "AIzaSyCWdAlrZ6z91pZvKxg3x3Klt3PYMtKvuA4",
             authDomain: "budzetremontowy.firebaseapp.com",
@@ -121,18 +137,12 @@
             appId: "1:85991178574:web:547fb6640aabf0950f1e1f",
             measurementId: "G-DD3ZY7PGB1"
         };
-
-        // KROK 2: WKLEJ TUTAJ SWÓJ KLUCZ reCAPTCHA v3
-        // Klucz "deltA!..." jest prawdopodobnie nieprawidłowy. Skopiuj właściwy klucz
-        // z Firebase Console -> App Check -> Aplikacje -> Twoja aplikacja (sekcja Site Key).
-        const reCaptchaSiteKey = "6LcJO8krAAAAAPV73vDo_Uwtm5lQoTfm0MrIMpPa";
+        const reCaptchaSiteKey = "6LcJQ8krAAAAAPV73vDo_UWtm5iQoTfmOMrIMpPa";
 
         firebase.initializeApp(firebaseConfig);
-        
         try {
             const appCheck = firebase.appCheck();
             appCheck.activate(reCaptchaSiteKey, true);
-            console.log("Firebase App Check activated successfully.");
         } catch (error) {
             console.error("Error activating Firebase App Check:", error);
         }
@@ -155,13 +165,12 @@
                 localExpensesCache = snapshot.docs.map(doc => ({ 
                     id: doc.id, 
                     ...doc.data(),
-                    // Upewnij się, że createdAt jest obiektem Timestamp
                     createdAt: doc.data().createdAt || firebase.firestore.Timestamp.now()
                 }));
                 renderApp(localExpensesCache);
             }, error => {
                 console.error("Błąd pobierania danych z Firestore: ", error);
-                alert("Nie udało się połączyć z bazą danych. Sprawdź, czy konfiguracja Firebase i klucz reCAPTCHA są poprawne.");
+                alert("Nie udało się połączyć z bazą danych.");
             });
             
             const tabs = document.querySelectorAll('.tab');
@@ -181,7 +190,13 @@
             const formTitle = document.getElementById('form-title');
             const submitBtn = document.getElementById('submit-btn');
             const cancelEditBtn = document.getElementById('cancel-edit-btn');
-            const formInputs = { name: document.getElementById('name'), category: document.getElementById('category'), room: document.getElementById('room'), budget: document.getElementById('budget'), cost: document.getElementById('cost'), status: document.getElementById('status'), productLink: document.getElementById('productLink'), imageUrl: document.getElementById('imageUrl') };
+            const formInputs = { 
+                name: document.getElementById('name'), category: document.getElementById('category'), 
+                room: document.getElementById('room'), budget: document.getElementById('budget'), 
+                itemCost: document.getElementById('itemCost'), transportCost: document.getElementById('transportCost'), 
+                status: document.getElementById('status'), productLink: document.getElementById('productLink'), 
+                imageUrl: document.getElementById('imageUrl') 
+            };
 
             const resetForm = () => { expenseForm.reset(); expenseIdInput.value = ''; formTitle.textContent = 'Dodaj nowy wpis'; submitBtn.textContent = 'Dodaj wpis'; cancelEditBtn.classList.add('hidden'); };
             
@@ -212,15 +227,25 @@
             };
 
             window.deleteExpense = (id) => { if (confirm('Na pewno chcesz usunąć ten wpis?')) { expensesCollection.doc(id).delete().catch(err => console.error("Błąd usuwania:", err)); } };
+            
+            window.updateStatus = (id, newStatus) => {
+                expensesCollection.doc(id).update({ status: newStatus })
+                    .catch(err => console.error("Błąd aktualizacji statusu:", err));
+            };
 
             const formatCurrency = (value) => new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(value || 0);
 
-            const getStatusBadge = (status) => {
+            const getStatusSelector = (expense) => {
+                const statuses = ['Na liście życzeń', 'Do kupienia', 'Zamówione', 'Dostarczone / Zakończone'];
                 const colors = {
                     'Na liście życzeń': 'bg-gray-200 text-gray-800', 'Do kupienia': 'bg-yellow-200 text-yellow-800',
                     'Zamówione': 'bg-blue-200 text-blue-800', 'Dostarczone / Zakończone': 'bg-green-200 text-green-800',
                 };
-                return `<span class="status-badge px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${colors[status] || ''}">${status}</span>`;
+                let optionsHtml = statuses.map(s => `<option value="${s}" ${expense.status === s ? 'selected' : ''}>${s}</option>`).join('');
+                
+                return `<select onchange="updateStatus('${expense.id}', this.value)" class="status-select ${colors[expense.status]}">
+                    ${optionsHtml}
+                </select>`;
             };
 
             const renderApp = (expenses) => {
@@ -230,7 +255,10 @@
             };
 
             const renderDashboard = (expenses) => {
-                const totalSpent = expenses.filter(e => e.status === 'Zamówione' || e.status === 'Dostarczone / Zakończone').reduce((sum, e) => sum + (parseFloat(e.cost) || 0), 0);
+                const totalSpent = expenses
+                    .filter(e => e.status === 'Zamówione' || e.status === 'Dostarczone / Zakończone')
+                    .reduce((sum, e) => sum + (parseFloat(e.itemCost) || 0) + (parseFloat(e.transportCost) || 0), 0);
+                
                 document.getElementById('total-budget').textContent = formatCurrency(TOTAL_FIXED_BUDGET);
                 document.getElementById('total-spent').textContent = formatCurrency(totalSpent);
                 const difference = TOTAL_FIXED_BUDGET - totalSpent;
@@ -248,18 +276,22 @@
                     expenseList.innerHTML = `<tr><td colspan="9" class="text-center text-slate-500 py-10">Brak wydatków. Dodaj pierwszy wpis, aby rozpocząć.</td></tr>`;
                 } else {
                     displayedExpenses.forEach(expense => {
-                        const budget = parseFloat(expense.budget) || 0, cost = parseFloat(expense.cost) || 0;
+                        const budget = parseFloat(expense.budget) || 0;
+                        const itemCost = parseFloat(expense.itemCost) || 0;
+                        const transportCost = parseFloat(expense.transportCost) || 0;
+                        const totalCost = itemCost + transportCost;
+
                         const row = document.createElement('tr');
                         row.className = 'hover:bg-slate-50 dark:hover:bg-slate-800';
                         row.innerHTML = `
                             <td class="px-6 py-4"><img src="${expense.imageUrl || 'https://placehold.co/60x40/e2e8f0/64748b?text=Brak'}" alt="Zdjęcie" class="h-10 w-16 object-cover rounded-md"></td>
                             <td class="px-6 py-4 font-medium">${expense.name} ${expense.productLink ? `<a href="${expense.productLink}" target="_blank" class="text-blue-500 ml-1">🔗</a>` : ''}</td>
-                            <td class="px-6 py-4">${getStatusBadge(expense.status)}</td>
+                            <td class="px-6 py-4">${getStatusSelector(expense)}</td>
                             <td class="px-6 py-4">${expense.category}</td>
                             <td class="px-6 py-4">${expense.room}</td>
                             <td class="px-6 py-4 text-right">${formatCurrency(budget)}</td>
-                            <td class="px-6 py-4 text-right font-semibold">${formatCurrency(cost)}</td>
-                            <td class="px-6 py-4 text-right ${budget - cost >= 0 ? 'text-green-600' : 'text-red-600'}">${formatCurrency(budget - cost)}</td>
+                            <td class="px-6 py-4 text-right font-semibold">${formatCurrency(totalCost)}</td>
+                            <td class="px-6 py-4 text-right ${budget - totalCost >= 0 ? 'text-green-600' : 'text-red-600'}">${formatCurrency(budget - totalCost)}</td>
                             <td class="px-6 py-4 text-center">
                                 <button onclick="editExpense('${expense.id}')" class="text-indigo-600 hover:text-indigo-900 mr-4 font-semibold">Edytuj</button>
                                 <button onclick="deleteExpense('${expense.id}')" class="text-red-600 hover:text-red-900 font-semibold">Usuń</button>
@@ -271,10 +303,15 @@
             
              const renderWishlistPage = (allExpenses) => {
                 const wishlistList = document.getElementById('wishlist-list');
+                const wishlistTotalEl = document.getElementById('wishlist-total');
                 const wishlistItems = allExpenses.filter(e => e.status === 'Na liście życzeń');
+
+                const totalWishlistBudget = wishlistItems.reduce((sum, item) => sum + (parseFloat(item.budget) || 0), 0);
+                wishlistTotalEl.textContent = formatCurrency(totalWishlistBudget);
+                
                 wishlistList.innerHTML = '';
                 if (wishlistItems.length === 0) {
-                     wishlistList.innerHTML = `<tr><td colspan="6" class="text-center text-slate-500 py-10">Brak pomysłów na liście życzeń.</td></tr>`;
+                     wishlistList.innerHTML = `<tr><td colspan="7" class="text-center text-slate-500 py-10">Brak pomysłów na liście życzeń.</td></tr>`;
                 } else {
                     wishlistItems.forEach(item => {
                         const row = document.createElement('tr');
@@ -282,6 +319,7 @@
                         row.innerHTML = `
                             <td class="px-6 py-4"><img src="${item.imageUrl || 'https://placehold.co/60x40/e2e8f0/64748b?text=Brak'}" alt="Zdjęcie" class="h-10 w-16 object-cover rounded-md"></td>
                             <td class="px-6 py-4 font-medium">${item.name} ${item.productLink ? `<a href="${item.productLink}" target="_blank" class="text-blue-500 ml-1">🔗</a>` : ''}</td>
+                            <td class="px-6 py-4">${getStatusSelector(item)}</td>
                             <td class="px-6 py-4">${item.category}</td>
                             <td class="px-6 py-4">${item.room}</td>
                             <td class="px-6 py-4 text-right">${formatCurrency(item.budget)}</td>
@@ -297,20 +335,19 @@
             const renderCharts = (expenses) => {
                 const spentExpenses = expenses.filter(e => e.status === 'Zamówione' || e.status === 'Dostarczone / Zakończone');
                 
-                // Pie Chart
                 const categoryData = spentExpenses.reduce((acc, e) => {
-                    acc[e.category] = (acc[e.category] || 0) + (parseFloat(e.cost) || 0);
+                    const totalCost = (parseFloat(e.itemCost) || 0) + (parseFloat(e.transportCost) || 0);
+                    acc[e.category] = (acc[e.category] || 0) + totalCost;
                     return acc;
                 }, {});
                 const pieCtx = document.getElementById('categoryPieChart').getContext('2d');
                 if (categoryPieChart) categoryPieChart.destroy();
                 categoryPieChart = new Chart(pieCtx, { type: 'pie', data: { labels: Object.keys(categoryData), datasets: [{ data: Object.values(categoryData), backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6', '#64748b'] }] }});
 
-                // Bar Chart
                 const comparisonData = expenses.reduce((acc, e) => {
                     if (!acc[e.category]) acc[e.category] = { budget: 0, cost: 0 };
                     acc[e.category].budget += parseFloat(e.budget) || 0;
-                    acc[e.category].cost += parseFloat(e.cost) || 0;
+                    acc[e.category].cost += (parseFloat(e.itemCost) || 0) + (parseFloat(e.transportCost) || 0);
                     return acc;
                 }, {});
                 const barCtx = document.getElementById('budgetBarChart').getContext('2d');
@@ -318,7 +355,6 @@
                 budgetBarChart = new Chart(barCtx, { type: 'bar', data: { labels: Object.keys(comparisonData), datasets: [ { label: 'Planowany budżet', data: Object.values(comparisonData).map(d => d.budget), backgroundColor: '#a5b4fc' }, { label: 'Rzeczywisty koszt', data: Object.values(comparisonData).map(d => d.cost), backgroundColor: '#34d399' } ] }, options: { scales: { y: { beginAtZero: true } } }});
             };
 
-            // Pozostałe listenery i funkcje inicjalizujące
             const darkModeToggle = document.getElementById('dark-mode-toggle');
             darkModeToggle.addEventListener('change', () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('darkMode', darkModeToggle.checked); renderApp(localExpensesCache); });
             const isDarkMode = localStorage.getItem('darkMode') === 'true';
