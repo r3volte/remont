@@ -34,6 +34,7 @@ Bezpieczeństwo: Firebase App Check, Google reCAPTCHA v3
 Hosting: GitHub Pages
 
 📜 Changelog (Historia Zmian)
+
 v2.2 - Usprawnienia Funkcjonalne (14.09.2025)
 Dodano: Osobne pole na koszt transportu w formularzu.
 
