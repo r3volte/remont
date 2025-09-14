@@ -1,12 +1,15 @@
-Remontowy Manager Budżetu
+Mieszkaniowy Manager Budżetu
+
 🚀 Wprowadzenie
+
 Remontowy Manager Budżetu to prosta, ale potężna aplikacja internetowa stworzona do śledzenia i zarządzania wydatkami podczas remontu lub urządzania mieszkania. Projekt ewoluował z koncepcji arkusza kalkulacyjnego w pełni funkcjonalne, chmurowe narzędzie analityczne, umożliwiające współpracę w czasie rzeczywistym.
 
 Aplikacja jest wdrożona na GitHub Pages i wykorzystuje Firebase jako backend, co zapewnia synchronizację danych między wieloma użytkownikami i urządzeniami.
 
 
 ✨ Kluczowe Funkcjonalności
-  Analityczny Panel Główny: Interaktywny dashboard z kluczowymi wskaźnikami (budżet, wydatki, pozostała kwota) oraz wizualizacjami danych (wykres kołowy i słupkowy).
+
+Analityczny Panel Główny: Interaktywny dashboard z kluczowymi wskaźnikami (budżet, wydatki, pozostała kwota) oraz wizualizacjami danych (wykres kołowy i słupkowy).
 
 Synchronizacja w Czasie Rzeczywistym: Dzięki integracji z Firebase Firestore, wszystkie dane są natychmiast synchronizowane między wszystkimi użytkownikami.
 
@@ -23,6 +26,7 @@ Bezpieczeństwo: Aplikacja zabezpieczona przez Firebase App Check z integracją 
 Nowoczesny Interfejs: Przejrzysty, responsywny design z trybem ciemnym (Dark Mode).
 
 🛠️ Tech Stack
+
 Frontend: HTML5, Tailwind CSS, JavaScript (ES6)
 
 Backend & Baza Danych: Google Firebase (Firestore, Authentication)
